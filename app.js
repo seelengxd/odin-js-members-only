@@ -6,11 +6,45 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
+// db
 const mongoose = require("mongoose");
 const mongoDb = process.env.MONGODB_URI;
 mongoose.connect(mongoDb, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
+
+// auth
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const User = require("./models/user");
+
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    User.find({ username }, (err, found_user) => {
+      if (err) {
+        done(err, null);
+        return;
+      }
+      if (!found_user) {
+        done(err, false, { message: "Incorrect username" });
+        return;
+      }
+      bcrypt.compare(password, user.password, (err, result) => {
+        if (!result) {
+          done(err, false, { message: "Incorrect password" });
+        } else {
+          done(null, found_user);
+        }
+      });
+    });
+  })
+);
+
+passport.serializeUser((user, done) => done(null, user._id));
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, found_user) => done(err, found_user));
+});
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -26,6 +60,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(
+  session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
