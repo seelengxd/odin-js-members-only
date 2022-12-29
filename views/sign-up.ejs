@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Members Only</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <%- include("header") %>
+    <form method="POST" class="card">
+      <div>
+        <h1>Sign Up</h1>
+      </div>
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" />
+      </div>
+      <div>
+        <label for="firstName">First Name:</label>
+        <input type="text" name="firstName" id="firstName" />
+      </div>
+      <div>
+        <label for="lastName">Last Name:</label>
+        <input type="text" name="lastName" id="lastName" />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" />
+      </div>
+      <div>
+        <label for="confirmPassword">Confirm password:</label>
+        <input type="password" name="confirmPassword" id="confirmPassword" />
+      </div>
+      <div>
+        <input type="submit" />
+      </div>
+      <% if (errors) { %>
+      <ul>
+        <% for (const error of errors) { %>
+        <li><%= error.msg %></li>
+        <% } %>
+      </ul>
+      <% } %>
+    </form>
+  </body>
+</html>

@@ -7,10 +7,6 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00b7ff;
-}
-
 header {
   display: flex;
   justify-content: space-between;
@@ -57,4 +53,25 @@ button {
 .card p:last-child {
   margin-top: auto;
   align-self: flex-end;
+}
+
+a {
+  text-decoration: none;
+}
+
+form {
+  margin: 20px auto;
+  max-width: 500px;
+}
+
+form div {
+  padding: 10px;
+}
+
+a:visited {
+  color: white;
+}
+
+button a:visited {
+  color: black;
 }

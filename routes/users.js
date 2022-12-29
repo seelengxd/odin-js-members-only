@@ -3,7 +3,9 @@ var router = express.Router();
 const UserController = require("../controllers/UserController");
 
 /* GET users listing. */
-router.get("/sign-up", UserController.signUp);
+router.get("/sign-up", UserController.signUpGet);
+
+router.post("/sign-up", UserController.signUpPost);
 
 router.get("/log-in", UserController.logIn);
 
