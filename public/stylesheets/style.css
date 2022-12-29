@@ -55,7 +55,7 @@ button {
   align-self: flex-end;
 }
 
-a {
+header a {
   text-decoration: none;
 }
 
@@ -68,7 +68,7 @@ form div {
   padding: 10px;
 }
 
-a:visited {
+header a:visited {
   color: white;
 }
 

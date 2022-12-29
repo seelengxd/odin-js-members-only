@@ -8,30 +8,19 @@
     <%- include("header") %>
     <form method="POST" class="card">
       <div>
-        <h1>Sign Up</h1>
+        <h1>Log in</h1>
       </div>
       <div>
-        <p>Already have an account? <a href="/users/log-in">Log in</a></p>
+        <p>Don't have an account? <a href="/users/sign-up">Sign up!</a></p>
       </div>
       <div>
         <label for="username">Username:</label>
         <input type="text" name="username" id="username" />
       </div>
-      <div>
-        <label for="firstName">First Name:</label>
-        <input type="text" name="firstName" id="firstName" />
-      </div>
-      <div>
-        <label for="lastName">Last Name:</label>
-        <input type="text" name="lastName" id="lastName" />
-      </div>
+
       <div>
         <label for="password">Password:</label>
         <input type="password" name="password" id="password" />
-      </div>
-      <div>
-        <label for="confirmPassword">Confirm password:</label>
-        <input type="password" name="confirmPassword" id="confirmPassword" />
       </div>
       <div>
         <input type="submit" />

@@ -1,9 +1,10 @@
 const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 const User = require("../models/user");
+const passport = require("passport");
 
 exports.signUpGet = function (req, res, next) {
-  res.render("sign-up");
+  res.render("sign-up", { errors: [] });
 };
 
 exports.signUpPost = [
@@ -23,7 +24,6 @@ exports.signUpPost = [
   body("lastName", "Last Name cannot be empty").isLength({ min: 1 }),
   function (req, res, next) {
     const errors = validationResult(req);
-    console.log(errors);
     if (!errors.isEmpty()) {
       res.render("sign-up", { errors: errors.array() });
     }
@@ -45,17 +45,42 @@ exports.signUpPost = [
           lastName: req.body.lastName,
         })
           .save()
-          .then(() => res.redirect("/log-in"))
+          .then((user) => {
+            req.logIn(user, (err) => {
+              if (err) {
+                return next(err);
+              }
+              res.redirect("/");
+            });
+          })
           .catch((err) => next(err));
       });
     });
   },
 ];
 
-exports.logIn = function (req, res, next) {
-  res.send("Log in, not implemented");
+exports.logInGet = function (req, res, next) {
+  console.log(req.session);
+  res.render("log-in", {
+    errors: req.session.messages ? [{ msg: req.session.messages[0] }] : [],
+  });
 };
 
+exports.logInPost = [
+  passport.authenticate("local", {
+    failureRedirect: "/users/log-in",
+    failureMessage: true,
+  }),
+  function (req, res, next) {
+    res.redirect("/");
+  },
+];
+
 exports.logOut = function (req, res, next) {
-  res.send("Log out, not implemented");
+  req.logOut((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
 };

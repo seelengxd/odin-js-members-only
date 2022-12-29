@@ -18,10 +18,11 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("./models/user");
+const bcrypt = require("bcryptjs");
 
 passport.use(
   new LocalStrategy((username, password, done) => {
-    User.find({ username }, (err, found_user) => {
+    User.findOne({ username }, (err, found_user) => {
       if (err) {
         done(err, null);
         return;
@@ -30,7 +31,7 @@ passport.use(
         done(err, false, { message: "Incorrect username" });
         return;
       }
-      bcrypt.compare(password, user.password, (err, result) => {
+      bcrypt.compare(password, found_user.password, (err, result) => {
         if (!result) {
           done(err, false, { message: "Incorrect password" });
         } else {
@@ -71,6 +72,11 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
