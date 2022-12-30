@@ -3,6 +3,13 @@ const { body, validationResult } = require("express-validator");
 const User = require("../models/user");
 const passport = require("passport");
 
+const requireLogin = function (req, res, next) {
+  if (!req.user) {
+    res.redirect("/users/sign-up");
+  }
+  next();
+};
+
 exports.signUpGet = function (req, res, next) {
   res.render("sign-up", { errors: [] });
 };
@@ -60,7 +67,6 @@ exports.signUpPost = [
 ];
 
 exports.logInGet = function (req, res, next) {
-  console.log(req.session);
   res.render("log-in", {
     errors: req.session.messages ? [{ msg: req.session.messages[0] }] : [],
   });
@@ -84,3 +90,27 @@ exports.logOut = function (req, res, next) {
     res.redirect("/");
   });
 };
+
+exports.memberGet = [
+  requireLogin,
+  function (req, res, next) {
+    res.render("member", { errors: [] });
+  },
+];
+
+exports.memberPost = [
+  requireLogin,
+  function (req, res, next) {
+    if (req.body.password !== "hunter2") {
+      res.render("member", {
+        errors: [{ msg: "That is not the secret password!" }],
+      });
+    }
+    User.findByIdAndUpdate(req.user._id, { isMember: true }, (err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("/");
+    });
+  },
+];

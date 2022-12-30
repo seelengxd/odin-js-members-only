@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title>Members Only</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
-    <%- include("header") %>
+    <%- include("header") %> <% if (currentUser) { %>
     <div class="button-container">
       <button>Create Message</button>
-      <button>Become a Member!</button>
+      <% if (!currentUser.isMember) { %>
+      <button><a href="/users/member">Become a Member!</a></button>
+      <% } %>
     </div>
+    <% } %>
     <div class="container">
       <div class="card">
         <h1>This is a test title.</h1>
