@@ -12,6 +12,16 @@ const requireLogin = function (req, res, next) {
 
 exports.requireLogin = requireLogin;
 
+exports.requireAdmin = [
+  requireLogin,
+  function (req, res, next) {
+    if (!req.user.isAdmin) {
+      res.send("Not authorised. You aren't an admin.");
+    }
+    next();
+  },
+];
+
 exports.signUpGet = function (req, res, next) {
   res.render("sign-up", { errors: [] });
 };

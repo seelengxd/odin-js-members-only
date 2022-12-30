@@ -16,6 +16,11 @@
     <div class="container">
       <% for (const post of posts) { %>
       <div class="card">
+        <% if ((currentUser && currentUser.isAdmin)) { %>
+        <button class="delete">
+          <a href="<%=`/posts/${post._id}`%>">X</a>
+        </button>
+        <% } %>
         <h1><%= post.title %></h1>
         <p><%= post.message %></p>
         <% if ((currentUser && currentUser.isMember)) { %>

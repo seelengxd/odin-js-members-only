@@ -5,7 +5,7 @@ const Post = require("../models/post");
 exports.new = [
   UserController.requireLogin,
   function (req, res, next) {
-    res.render("post", { errors: [] });
+    res.render("post", { errors: [], post: null });
   },
 ];
 
@@ -14,11 +14,26 @@ exports.create = [
   body("title", "Title cannot be empty!").isLength({ min: 1 }),
   body("message", "Message cannot be empty!").isLength({ min: 1 }),
   function (req, res, next) {
-    new Post({ ...req.body, user: req.user._id })
+    const post = new Post({ ...req.body, user: req.user._id });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render("post", { errors: errors.array(), post });
+    }
+    post
       .save()
       .then(() => res.redirect("/"))
       .catch((err) => next(err));
   },
 ];
 
-exports.delete = function (req, res, next) {};
+exports.delete = [
+  UserController.requireAdmin,
+  function (req, res, next) {
+    Post.findByIdAndRemove(req.params.id, (err, deletedPost) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("/");
+    });
+  },
+];

@@ -36,6 +36,7 @@ button {
   box-shadow: 0 0 5px #888;
   flex: 1;
   min-width: min(300px, 30%);
+  position: relative;
 }
 
 .container {
@@ -74,4 +75,10 @@ header a:visited {
 
 button a:visited {
   color: black;
+}
+
+.delete {
+  top: 0;
+  right: 0;
+  position: absolute;
 }
