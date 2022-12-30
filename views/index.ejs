@@ -7,63 +7,24 @@
   <body>
     <%- include("header") %> <% if (currentUser) { %>
     <div class="button-container">
-      <button>Create Message</button>
+      <button><a href="/posts/new">Create Message</a></button>
       <% if (!currentUser.isMember) { %>
       <button><a href="/users/member">Become a Member!</a></button>
       <% } %>
     </div>
     <% } %>
     <div class="container">
+      <% for (const post of posts) { %>
       <div class="card">
-        <h1>This is a test title.</h1>
-        <p>
-          This is a template message. It can be quite long. Maybe just this
-          long.
-        </p>
-        <p>- first, last</p>
+        <h1><%= post.title %></h1>
+        <p><%= post.message %></p>
+        <% if ((currentUser && currentUser.isMember)) { %>
+        <p>- <%= post.user.fullName %></p>
+        <% } else { %>
+        <p>- HIDDEN</p>
+        <% } %>
       </div>
-      <div class="card">
-        <h1>This is a test title.</h1>
-        <p>
-          This is a template message. It can be quite long. Maybe just this
-          long.
-        </p>
-        <p>- first, last</p>
-      </div>
-      <div class="card">
-        <h1>This is a test title.</h1>
-        <p>
-          This is a template message. It can be quite long. Maybe just this
-          long.
-        </p>
-        <p>- first, last</p>
-      </div>
-      <div class="card">
-        <h1>This is a test title.</h1>
-        <p>
-          This is a template message. It can be quite long. Maybe just this
-          long.
-        </p>
-        <p>- first, last</p>
-      </div>
-      <div class="card">
-        <h1>This is a test title.</h1>
-        <p>
-          This is a template message. It can be quite long. Maybe just this
-          long. Maybe just this long. Maybe just this long. Maybe just this
-          long. Maybe just this long. Yes, very long. Yes, very long. Yes, very
-          long. Yes, very long. Yes, very long. Yes, very long.
-        </p>
-        <p>- first, last</p>
-      </div>
-      <div class="card">
-        <h1>This is a test title.</h1>
-        <p>
-          This is a template message. It can be quite long. Maybe just this
-          long.
-        </p>
-        <p>- first, last</p>
-      </div>
+      <% } %>
     </div>
   </body>
 </html>

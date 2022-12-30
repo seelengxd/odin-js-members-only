@@ -10,6 +10,8 @@ const requireLogin = function (req, res, next) {
   next();
 };
 
+exports.requireLogin = requireLogin;
+
 exports.signUpGet = function (req, res, next) {
   res.render("sign-up", { errors: [] });
 };
